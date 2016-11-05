@@ -49,23 +49,6 @@ function buyTicket() {
 
 };
 
-$(document).on("ready", function(){
-  populateAccounts();
-});
-
-function populateAccounts() {
-
-  $("accounts").empty();
-  web3.eth.getAccounts(function(err, accs){
-
-    $.each(accs, function(index, acc){
-      $("accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc)) + "</td></tr>");
-
-
-    });
-
-  });
-}
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
     if (err != null) {
@@ -87,4 +70,26 @@ window.onload = function() {
     refreshMyTickets(account[0]);
     refreshTicketsAvailable();
   });
+}
+
+$(document).on("ready", function(){
+  populateAccounts();
+});
+
+function populateAccounts() {
+
+  web3.eth.getAccounts(function(err, accs) {
+    alert(accs.length);
+  });
+
+  //$("#accounts").empty();
+  //web3.eth.getAccounts(function(err, accs){
+
+    //$.each(accs, function(index, acc){
+      //$("#accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc)) + "</td></tr>");
+
+
+    //});
+
+  //});
 }
