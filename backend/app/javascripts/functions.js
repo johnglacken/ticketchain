@@ -1,5 +1,5 @@
 var accountList;
-
+/*
 $(window).on("load", function(){
 
   web3.eth.getAccounts(function(err, accs) {
@@ -8,6 +8,7 @@ $(window).on("load", function(){
     populateAccounts(accountList);
   });
 });
+*/
 
 $(document).on("click", "#populate", function(){
 
