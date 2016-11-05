@@ -59,4 +59,12 @@ contract TicketChain {
 	function getTicketOwner(uint _uid) returns(address) {
 		return tickets[_uid].owner;
 	}
+
+	function getTicketDetails(uint _uid) returns(address owner, uint price, bool forSale, string description) {
+    
+	    owner = tickets[_uid].owner;
+	    price = tickets[_uid].price;
+	    forSale = tickets[_uid].forSale;
+	    description = tickets[_uid].description;
+	  } 
 }

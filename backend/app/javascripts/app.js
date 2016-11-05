@@ -91,6 +91,29 @@ function buyTicket() {
 
 };
 
+function displaySingleTicket(ticketId) {
+
+  console.log("displaySingleTicket: Entering");
+
+  var ticketChain = TicketChain.deployed();
+
+  var singleTicketlement = document.getElementById("single_ticket").value;
+
+  ticketChain.getTicketDetails.call(ticketId).then(function(value) {
+      
+      console.log("Have result of getTicketDetails");
+
+      console.log(value);
+      console.log(value.description);
+
+      document.getElementById("single_ticket").innerHTML = value;
+
+    }).catch(function(e) {
+    console.log(e);
+    setStatus("An error occured; see log.");
+  });
+};  
+
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
     if (err != null) {
