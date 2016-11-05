@@ -1,3 +1,3 @@
 $(document).on("ready", function(){
-  alert("hello");
+  alert(web3.eth.accounts[0]);
 });
