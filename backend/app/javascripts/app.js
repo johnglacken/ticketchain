@@ -31,9 +31,9 @@ function refreshTickets() {
         finished = true;
       } else {
         if (value === account) {
-          myTickets.innerHTML += "<li>"+value+"</li>";
+          addTicket(value, i, myTickets);
         } else {
-          availableTickets.innerHTML += "<li>"+value+"</li>";
+          addTicket(value, i, availableTickets);
         }
       }
     }).catch(function(e) {
@@ -42,6 +42,13 @@ function refreshTickets() {
     });
   }
 };
+
+function addTicket(address, id, element) {
+  var ticketChain = TicketChain.deployed();
+  element.innerHTML += '<li id="' + id + '">' + address + '</li>';
+  //ticketChain.getTicketOwner.call(i).then(function(value) {
+
+}
 
 
 function buyTicket() {
@@ -81,7 +88,7 @@ window.onload = function() {
     //refreshMyTickets(account[0]);
     //refreshTicketsAvailable();
 
-    populateAccounts(web3);
+    //populateAccounts(web3);
   });
 }
 

@@ -4,6 +4,7 @@ contract TicketChain {
 
 	struct Ticket {
 		address owner;
+		string description;
 		uint price;
 		bool forSale;
 	}
@@ -11,20 +12,20 @@ contract TicketChain {
 	mapping(uint => Ticket) tickets;
 
 	function TicketChain() {
-		newTicket(1, this, 10);
-		newTicket(2, this, 20);
-		newTicket(3, this, 11);
-		newTicket(4, this, 10);
-		newTicket(5, this, 10);
-		newTicket(6, this, 10);
-		newTicket(7, this, 10);
-		newTicket(8, this, 10);
-		newTicket(9, this, 10);
-		newTicket(10, this, 10);
+		newTicket(1, this, "Justin Bieber", 55);
+		newTicket(2, this, "Justin Bieber", 55);
+		newTicket(3, this, "Justin Bieber", 55);
+		newTicket(4, this, "Justin Bieber", 55);
+		newTicket(5, this, "Adele", 40);
+		newTicket(6, this, "Adele", 40);
+		newTicket(7, this, "Adele", 40);
+		newTicket(8, this, "One Direction", 40);
+		newTicket(9, this, "Blockchain Hackathon", 15000);
+		newTicket(10, this, "Blockchain Hackathon", 15000);
 	}
 
-	function newTicket(uint _uid, address _owner, uint _price) {
-		tickets[_uid] = Ticket(_owner, _price, true);
+	function newTicket(uint _uid, address _owner, string _description, uint _price) {
+		tickets[_uid] = Ticket(_owner, _description, _price, true);
 	}
 
 	function buyTicket(uint _uid) payable returns(bool) {
@@ -43,12 +44,19 @@ contract TicketChain {
 		if (ticket.forSale) throw;
 		ticket.forSale = true;
 	}
+	function getTicketPrice(uint _uid) returns(uint) {
+	  return tickets[_uid].price;
+	}
+
+	function getTicketDescription(uint _uid) returns(string) {
+	  return tickets[_uid].description;
+	}
+
+	function getTicketForSale(uint _uid) returns(bool) {
+	  return tickets[_uid].forSale;
+	}
 
 	function getTicketOwner(uint _uid) returns(address) {
 		return tickets[_uid].owner;
-	}
-
-	function getTicketPrice(uint _uid) returns(uint) {
-		return tickets[_uid].price;
 	}
 }
