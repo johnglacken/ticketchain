@@ -41,7 +41,7 @@
 							<overwrite>true</overwrite>
 							<resources>
 								<resource>
-									<directory>../ticketchain-ui</directory>
+									<directory>../../backend</directory>
 								</resource>
 							</resources>
 						</configuration>
@@ -57,7 +57,7 @@
 							<overwrite>true</overwrite>
 							<resources>
 								<resource>
-									<directory>../ticketchain-ui/bower_components</directory>
+									<directory>../../backend/bower_components</directory>
 								</resource>
 							</resources>
 						</configuration>
