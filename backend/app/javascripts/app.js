@@ -49,6 +49,10 @@ function buyTicket() {
 
 };
 
+$(document).on("ready", function(){
+  alert("hello");
+});
+
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
     if (err != null) {
