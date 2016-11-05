@@ -69,27 +69,16 @@ window.onload = function() {
     document.getElementById("yourAddress").innerHTML = account;
     refreshMyTickets(account[0]);
     refreshTicketsAvailable();
+
+    populateAccounts(web3);
   });
 }
 
-$(document).on("ready", function(){
-  populateAccounts();
-});
+function populateAccounts(w3) {
 
-function populateAccounts() {
+  $.each(accounts, function(index, acc){
+    $("#accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc)) + "</td></tr>");
 
-  web3.eth.getAccounts(function(err, accs) {
-    alert(accs.length);
+
   });
-
-  //$("#accounts").empty();
-  //web3.eth.getAccounts(function(err, accs){
-
-    //$.each(accs, function(index, acc){
-      //$("#accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc)) + "</td></tr>");
-
-
-    //});
-
-  //});
 }
