@@ -6,33 +6,47 @@ function setStatus(message) {
   status.innerHTML = message;
 };
 
-function refreshBalance() {
-  var meta = MetaCoin.deployed();
-
-  meta.getBalance.call(account, {from: account}).then(function(value) {
-    var balance_element = document.getElementById("balance");
-    balance_element.innerHTML = value.valueOf();
+function refreshTicketsAvailable() {
+  var ticketChain = TicketChain.deployed();
+  ticketChain.getAvailableTicketIds.call().then(function(value) {
+    var availableTickets = document.getElementById("availableTickets");
+    for(var i = 0; i < value.length; i++){
+      availableTickets.innerHTML += "<li>"+value[i]+"</li>";
+    }
   }).catch(function(e) {
     console.log(e);
-    setStatus("Error getting balance; see log.");
+    setStatus("Error see log.");
   });
 };
 
-function sendCoin() {
-  var meta = MetaCoin.deployed();
+function refreshMyTickets(address) {
+  var ticketChain = TicketChain.deployed();
+  ticketChain.getListOfTicketIds.call(address).then(function(value) {
+    var myTickets = document.getElementById("myTickets");
+    for(var i = 0; i < value.length; i++){
+      myTickets.innerHTML += "<li>"+value[i]+"</li>";
+    }
+  }).catch(function(e) {
+    console.log(e);
+    setStatus("Error see log.");
+  });
+};
 
-  var amount = parseInt(document.getElementById("amount").value);
-  var receiver = document.getElementById("receiver").value;
+function buyTicket() {
+  var ticketChain = TicketChain.deployed();
+
+  var price = parseInt(document.getElementById("price").value);
+  var ticketid = document.getElementById("ticketid").value;
 
   setStatus("Initiating transaction... (please wait)");
 
-  meta.sendCoin(receiver, amount, {from: account}).then(function() {
+  ticketChain.buyTicket.sendTransaction(ticketid, {from: account, value: price}).then(function() {
     setStatus("Transaction complete!");
-    refreshBalance();
-  }).catch(function(e) {
+    }).catch(function(e) {
     console.log(e);
-    setStatus("Error sending coin; see log.");
+    setStatus("An error occured; see log.");
   });
+
 };
 
 window.onload = function() {
@@ -47,9 +61,13 @@ window.onload = function() {
       return;
     }
 
+
+
     accounts = accs;
     account = accounts[0];
 
-    refreshBalance();
+    document.getElementById("yourAddress").innerHTML = account;
+    refreshMyTickets(account[0]);
+    refreshTicketsAvailable();
   });
 }
