@@ -30,10 +30,11 @@ function refreshTickets() {
 function fetchTicket(index) {
   ticketChain.getTicketOwner.call(index).then(function(value) {
     if (value != 0) {
-      console.log(index);
       if (value === account) {
+        console.log("MINEM mNEINMNNEMINE");
         addTicket(value, index, true);
       } else {
+      console.log(index);
         addTicket(value, index, false);
       }
       fetchTicket(++index);
