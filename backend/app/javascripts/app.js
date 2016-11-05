@@ -64,7 +64,7 @@ function populateAccounts() {
 
     });
 
-  }));
+  });
 }
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
