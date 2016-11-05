@@ -67,8 +67,8 @@ window.onload = function() {
     account = accounts[0];
 
     document.getElementById("yourAddress").innerHTML = account;
-    refreshMyTickets(account[0]);
-    refreshTicketsAvailable();
+    //refreshMyTickets(account[0]);
+    //refreshTicketsAvailable();
 
     populateAccounts(web3);
   });
