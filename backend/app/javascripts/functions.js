@@ -1,5 +1,10 @@
 var web3 = require('web3');
 
 $(document).on("ready", function(){
-  alert(web3.eth.accounts[0]);
+
+  web3.eth.getAccounts(function(err, accs) {
+
+    alert(accs[0]);
+
+  });
 });
