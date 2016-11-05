@@ -1,5 +1,6 @@
 var accounts;
 var account;
+var finished;
 
 function setStatus(message) {
   var status = document.getElementById("status");
@@ -19,18 +20,29 @@ function refreshTicketsAvailable() {
   });
 };
 
-function refreshMyTickets(address) {
+function refreshTickets() {
+  var myTickets = document.getElementById("myTickets");
+  var availableTickets = document.getElementById("availableTickets");
   var ticketChain = TicketChain.deployed();
-  ticketChain.getListOfTicketIds.call(address).then(function(value) {
-    var myTickets = document.getElementById("myTickets");
-    for(var i = 0; i < value.length; i++){
-      myTickets.innerHTML += "<li>"+value[i]+"</li>";
-    }
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error see log.");
-  });
+  finished = false;
+  for(var i = 1; i < 15; i++) {
+    ticketChain.getTicketOwner.call(i).then(function(value) {
+      if (value == 0) {
+        finished = true;
+      } else {
+        if (value === account) {
+          myTickets.innerHTML += "<li>"+value+"</li>";
+        } else {
+          availableTickets.innerHTML += "<li>"+value+"</li>";
+        }
+      }
+    }).catch(function(e) {
+      console.log(e);
+      setStatus("Error see log.");
+    });
+  }
 };
+
 
 function buyTicket() {
   var ticketChain = TicketChain.deployed();
@@ -61,13 +73,10 @@ window.onload = function() {
       return;
     }
 
-
-
     accounts = accs;
     account = accounts[0];
 
     document.getElementById("yourAddress").innerHTML = account;
-    refreshMyTickets(account[0]);
-    refreshTicketsAvailable();
+    refreshTickets();
   });
 }
