@@ -21,8 +21,8 @@ function refreshTicketsAvailable() {
 };
 
 function refreshTickets() {
-  var myTickets = document.getElementById("myTickets");
-  var availableTickets = document.getElementById("availableTickets");
+  var myTickets = $("#myTickets");
+  var availableTickets = $("#availableTickets");
   var ticketChain = TicketChain.deployed();
   finished = false;
   for(var i = 1; i < 15; i++) {
@@ -45,8 +45,24 @@ function refreshTickets() {
 
 function addTicket(address, id, element) {
   var ticketChain = TicketChain.deployed();
-  element.innerHTML += '<li id="' + id + '">' + address + '</li>';
-  //ticketChain.getTicketOwner.call(i).then(function(value) {
+  var tr = $('<tr>').attr('id', id);
+  element.append(tr);
+  tr.append($('<td>').html(address));
+  // Get Description
+  ticketChain.getTicketDescription.call(id).then(function(value) {
+    console.log(this);
+  }).catch(function(e) {
+    console.log(e);
+    setStatus("Error see log.");
+  });
+
+  // Get Price
+  ticketChain.getTicketPrice.call(id).then(function(value) {
+    console.log(this);
+  }).catch(function(e) {
+    console.log(e);
+    setStatus("Error see log.");
+  });
 
 }
 
