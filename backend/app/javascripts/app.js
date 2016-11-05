@@ -53,11 +53,11 @@ function addTicket(address, id, mine) {
   } else {
     $("#availableTickets").append(tr);
   }
+  tr.append($('<td>').html(id));
   tr.append($('<td>').html(address));
   // Get Description
   ticketChain.getTicketDescription.call(id).then(function(value) {
     $('#' + id).append($('<td>').html(value));
-    console.log(value);
   }).catch(function(e) {
     console.log(e);
     setStatus("Error see log.");
@@ -65,11 +65,15 @@ function addTicket(address, id, mine) {
 
   // Get Price
   ticketChain.getTicketPrice.call(id).then(function(value) {
-    $('#' + id).append($('<td>').html(value));
+    $('#' + id).append($('<td>').html(value.valueOf()));
   }).catch(function(e) {
     console.log(e);
     setStatus("Error see log.");
   });
+
+  if (mine) {
+    tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
+  }
 
 }
 
@@ -83,13 +87,25 @@ function buyTicket() {
   setStatus("Initiating transaction... (please wait)");
 
   ticketChain.buyTicket.sendTransaction(ticketid, {from: account, value: price}).then(function() {
-    setStatus("Transaction complete!");
+      setStatus("Transaction complete!");
+      refreshTickets();
     }).catch(function(e) {
-    console.log(e);
-    setStatus("An error occured; see log.");
+      console.log(e);
+      setStatus("An error occured; see log.");
   });
 
 };
+
+function sellTicket(id) {
+  var price = prompt("Please enter a price");
+  ticketChain.sellTicket.sendTransaction(id, price, {from: account}).then(function() {
+      setStatus("Transaction complete!");
+      refreshTickets();
+    }).catch(function(e) {
+      console.log(e);
+      setStatus("An error occured; see log.");
+  });
+}
 
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
