@@ -4,6 +4,12 @@ module.exports = {
     "app.js": [
       "javascripts/app.js"
     ],
+    "functions.js": [
+      "javascripts/functions.js"
+    ],
+    "jquery-1.12.4.min.js": [
+      "javascripts/jquery-1.12.4.min.js"
+    ],
     "app.css": [
       "stylesheets/app.css"
     ],

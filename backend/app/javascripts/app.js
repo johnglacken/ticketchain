@@ -78,5 +78,15 @@ window.onload = function() {
 
     document.getElementById("yourAddress").innerHTML = account;
     refreshTickets();
+    //refreshMyTickets(account[0]);
+    //refreshTicketsAvailable();
+
+    populateAccounts(web3);
+  });
+}
+
+function populateAccounts(w3) {
+  $.each(accounts, function(index, acc){
+    $("#accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc)) + "</td></tr>");
   });
 }
