@@ -1,6 +1,7 @@
 var accounts;
 var account;
 var finished;
+
 var ticketChain = TicketChain.deployed();
 
 function setStatus(message) {
@@ -150,11 +151,5 @@ window.onload = function() {
     //refreshTicketsAvailable();
 
     //populateAccounts(web3);
-  });
-}
-
-function populateAccounts(w3) {
-  $.each(accounts, function(index, acc){
-    $("#accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc)) + "</td></tr>");
   });
 }
