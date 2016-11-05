@@ -1,6 +1,7 @@
 var accounts;
 var account;
 var finished;
+var ticketChain = TicketChain.deployed();
 
 function setStatus(message) {
   var status = document.getElementById("status");
@@ -8,7 +9,6 @@ function setStatus(message) {
 };
 
 function refreshTicketsAvailable() {
-  var ticketChain = TicketChain.deployed();
   ticketChain.getAvailableTicketIds.call().then(function(value) {
     var availableTickets = document.getElementById("availableTickets");
     for(var i = 0; i < value.length; i++){
@@ -23,34 +23,40 @@ function refreshTicketsAvailable() {
 function refreshTickets() {
   var myTickets = $("#myTickets");
   var availableTickets = $("#availableTickets");
-  var ticketChain = TicketChain.deployed();
-  finished = false;
-  for(var i = 1; i < 15; i++) {
-    ticketChain.getTicketOwner.call(i).then(function(value) {
-      if (value == 0) {
-        finished = true;
-      } else {
-        if (value === account) {
-          addTicket(value, i, myTickets);
-        } else {
-          addTicket(value, i, availableTickets);
-        }
-      }
-    }).catch(function(e) {
-      console.log(e);
-      setStatus("Error see log.");
-    });
-  }
+  var finished = false;
+  fetchTicket(1);
 };
 
-function addTicket(address, id, element) {
+function fetchTicket(index) {
+  ticketChain.getTicketOwner.call(index).then(function(value) {
+    if (value != 0) {
+      console.log(index);
+      if (value === account) {
+        addTicket(value, index, true);
+      } else {
+        addTicket(value, index, false);
+      }
+      fetchTicket(++index);
+    }
+  }).catch(function(e) {
+    console.log(e);
+    setStatus("Error see log.");
+  });
+}
+
+function addTicket(address, id, mine) {
   var ticketChain = TicketChain.deployed();
   var tr = $('<tr>').attr('id', id);
-  element.append(tr);
+  if(mine) {
+    $("#myTickets").append(tr);
+  } else {
+    $("#availableTickets").append(tr);
+  }
   tr.append($('<td>').html(address));
   // Get Description
   ticketChain.getTicketDescription.call(id).then(function(value) {
-    console.log(this);
+    $('#' + id).append($('<td>').html(value));
+    console.log(value);
   }).catch(function(e) {
     console.log(e);
     setStatus("Error see log.");
@@ -58,7 +64,7 @@ function addTicket(address, id, element) {
 
   // Get Price
   ticketChain.getTicketPrice.call(id).then(function(value) {
-    console.log(this);
+    $('#' + id).append($('<td>').html(value));
   }).catch(function(e) {
     console.log(e);
     setStatus("Error see log.");
