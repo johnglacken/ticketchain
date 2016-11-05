@@ -59,7 +59,7 @@ function populateAccounts() {
   web3.eth.getAccounts(function(err, accs){
 
     $.each(accs, function(index, acc){
-      $("accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc));+ "</td></tr>");
+      $("accounts").append("<tr><td>" + acc + "</td><td>" + web3.fromWei(web3.eth.getBalance(acc)) + "</td></tr>");
 
 
     });
