@@ -6,10 +6,6 @@ module.exports = {
       "javascripts/jquery-1.12.4.min.js",
       "javascripts/app.js"
     ],
-    "printTicket.js": [
-      "javascripts/jquery-1.12.4.min.js",
-      "javascripts/printTicket.js"
-    ],
     "app.css": [
       "stylesheets/app.css"
     ],
