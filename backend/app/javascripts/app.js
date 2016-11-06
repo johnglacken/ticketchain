@@ -235,7 +235,8 @@ window.onload = function() {
     console.log('Account balance:' + balance);
 
     $('#validatelink').attr('href', "zxing://scan/?ret=" +
-      encodeURIComponent(window.location.href + "&function=validate&ticket={CODE}"));
+      encodeURIComponent(location.protocol + '//' + location.host + location.pathname
+	+ "?id=" + accountId + "&function=validate&ticket={CODE}"));
 
     var qr_func = getUrlParameter('function');
     if(qr_func == "validate") {
