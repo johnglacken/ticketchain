@@ -157,6 +157,21 @@ function displaySingleTicket(ticketId) {
   });
 };
 
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
     if (err != null) {
@@ -170,7 +185,12 @@ window.onload = function() {
     }
 
     accounts = accs;
-    account = accounts[0];
+
+    var accountId = getUrlParameter('id');
+    console.log('Logged on as account ID: ' + accountId);
+
+    account = accounts[accountId];
+    console.log('Account key: ' + account);
 
     document.getElementById("yourAddress").innerHTML = account;
     refreshTickets();
