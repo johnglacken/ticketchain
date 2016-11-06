@@ -219,6 +219,12 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
 };
 
+function getRandomId() {
+  var num = Math.floor(Math.random() * 500) + 1;
+  localStorage.setItem('account', num);
+  return num;
+}
+
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
     if (err != null) {
@@ -233,7 +239,7 @@ window.onload = function() {
 
     accounts = accs;
 
-    var accountId = getUrlParameter('id') || 0;
+    var accountId = getUrlParameter('id') || localStorage.getItem('account') || getRandomId();
     console.log('Logged on as account ID: ' + accountId);
 
     account = accounts[accountId];
