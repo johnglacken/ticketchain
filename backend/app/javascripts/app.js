@@ -75,7 +75,7 @@ function addTicket(ticket, id, mine) {
     if(mine)
     {
       if (ticket.forSale) {
-        tr.append($('<td>').html('<button class="btn" onclick="cancelSaleOfTicket('+id+')">Cancel Sale</button>'));
+        tr.append($('<td>').html('<button class="btn" onclick="cancelTicketSale('+id+')">Cancel Sale</button>'));
 
       } else {
         tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
