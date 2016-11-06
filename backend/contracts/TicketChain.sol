@@ -55,7 +55,7 @@ contract TicketChain {
 	}
 
 	function validateTicket(uint _uid, address owner) returns(bool) {
-		return (ticket.owner == owner);
+		return (tickets[_uid].owner == owner);
 	}
 
 	function getTicketDetails(uint _uid) returns(address owner, uint price, bool forSale, string description) {
@@ -63,5 +63,5 @@ contract TicketChain {
 	    price = tickets[_uid].price;
 	    forSale = tickets[_uid].forSale;
 	    description = tickets[_uid].description;
-	  } 
+	  }
 }

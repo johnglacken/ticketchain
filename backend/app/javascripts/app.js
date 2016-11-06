@@ -33,11 +33,12 @@ function refreshTickets() {
 function fetchTicket(index) {
   ticketChain.getTicketDetails.call(index).then(function(value) {
     var ticketDetails = parseTicketFromTicketDetailsResponse(value);
-    if (ticketDetails[0] != 0) {
-      if (ticketDetails[0] === account) {
+    console.log("aaa" + ticketDetails.owner);
+    if (ticketDetails.owner != 0) {
+      if (ticketDetails.owner === account) {
         addTicket(ticketDetails, index, true);
       } else {
-        addTicket(value, index, false);
+        addTicket(ticketDetails, index, false);
       }
       fetchTicket(++index);
     }
@@ -65,9 +66,9 @@ function addTicket(ticket, id, mine) {
       $("#availableTickets").append(tr);
     }
     tr.append($('<td>').html(id));
-    tr.append($('<td>').html(address));
+    tr.append($('<td>').html(ticket.owner));
     tr.append($('<td>').html(ticket.description));
-    tr.append($('<td>').html(ticket.price));
+    tr.append($('<td>').html(ticket.price.valueOf()));
 
     if(mine)
     {
@@ -79,10 +80,6 @@ function addTicket(ticket, id, mine) {
       tr.append($('<td>').html('<button class="btn" onclick="buyTicket('+id+')">Buy it!</button>'));
     }
 
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error see log.");
-  });
 }
 
 // Buy button action
@@ -104,7 +101,7 @@ function buyTicket() {
 
 };
 
-// Sell Button action 
+// Sell Button action
 function sellTicket(id) {
   var price = prompt("Please enter a price");
   ticketChain.sellTicket.sendTransaction(id, price, {from: account}).then(function() {
@@ -116,7 +113,7 @@ function sellTicket(id) {
   });
 }
 
-// TODO A button beside a ticket that I own should be available in the view that calls this 
+// TODO A button beside a ticket that I own should be available in the view that calls this
 function cancelTicketSale(ticketId) {
 
   console.log("cancelTicketSale: Entering");
@@ -191,7 +188,7 @@ window.onload = function() {
 
     accounts = accs;
 
-    var accountId = getUrlParameter('id');
+    var accountId = getUrlParameter('id') || 0;
     console.log('Logged on as account ID: ' + accountId);
 
     account = accounts[accountId];
