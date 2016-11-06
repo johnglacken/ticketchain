@@ -11,6 +11,11 @@ function setStatus(message) {
 
 function refreshTickets() {
 
+  var myTickets = $("#myTickets");
+  myTickets.empty();
+  var availableTickets = $("#availableTickets");
+  availableTickets.empty();
+
   ticketChain.getTotalTicketCount.call().then(function(ticketCount) {
     console.log('ticketCount: ' + ticketCount);
 
