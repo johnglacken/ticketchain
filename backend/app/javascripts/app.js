@@ -72,7 +72,13 @@ function addTicket(ticket, id, mine) {
 
     if(mine)
     {
-      tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
+      if (ticket.forSale) {
+        tr.append($('<td>').html('<button class="btn" onclick="cancelSaleOfTicket('+id+')">Cancel Sale</button>'));
+
+      } else {
+        tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
+
+      }
     }
 
     if(!mine && ticket.forSale)
@@ -119,6 +125,18 @@ function sellTicket(id) {
   });
 }
 
+// cancel sale of ticket
+function cancelSaleOfTicket(id) {
+
+  ticketChain.cancelTicketSale.sendTransaction(id, price, {from: account}).then(function() {
+      setStatus("Transaction complete!");
+      refreshTickets();
+    }).catch(function(e) {
+      console.log(e);
+      setStatus("An error occured; see log.");
+  });
+
+}
 
 
 // TODO A button beside a ticket that I own should be available in the view that calls this
