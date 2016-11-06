@@ -31,6 +31,7 @@ contract TicketChain {
 	function buyTicket(uint _uid) payable returns(bool) {
 		Ticket ticket = tickets[_uid];
 		if (msg.value <= ticket.price) throw; // this reverts the transfer if the money sent doesnt match the price
+		if (!ticket.forSale) throw;
 		bool x = ticket.owner.send(ticket.price);
 		address originalOwner = ticket.owner;
 		ticket.owner = msg.sender;
@@ -40,43 +41,24 @@ contract TicketChain {
 
 	function sellTicket(uint _uid, uint _price) returns(bool) {
 		Ticket ticket = tickets[_uid];
-
 		if (! (ticket.owner == msg.sender) ) throw;
-
 		if (ticket.forSale) throw;
-
 		ticket.price = _price;
 		ticket.forSale = true;
 	}
 
 	function cancelTicketSale(uint _uid) returns(bool) {
 		Ticket ticket = tickets[_uid];
-
 		if (! (ticket.owner == msg.sender) ) throw;
-
 		if (!ticket.forSale) throw;
-
-		ticket.forSale = true;
+		ticket.forSale = false;
 	}
 
-	function getTicketPrice(uint _uid) returns(uint) {
-	  return tickets[_uid].price;
-	}
-
-	function getTicketDescription(uint _uid) returns(string) {
-	  return tickets[_uid].description;
-	}
-
-	function getTicketForSale(uint _uid) returns(bool) {
-	  return tickets[_uid].forSale;
-	}
-
-	function getTicketOwner(uint _uid) returns(address) {
-		return tickets[_uid].owner;
+	function validateTicket(uint _uid, address owner) returns(bool) {
+		return (ticket.owner == owner);
 	}
 
 	function getTicketDetails(uint _uid) returns(address owner, uint price, bool forSale, string description) {
-    
 	    owner = tickets[_uid].owner;
 	    price = tickets[_uid].price;
 	    forSale = tickets[_uid].forSale;
