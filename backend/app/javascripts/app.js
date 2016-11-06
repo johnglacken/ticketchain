@@ -55,35 +55,6 @@ function parseTicketFromTicketDetailsResponse(ticketDetailsArray){
   return ticketDetails;
 }
 
-function addTicket(ticket, id, mine) {
-    var tr = $('<tr>').attr('id', id);
-    if(mine) {
-      $("#myTickets").append(tr);
-    } else {
-      $("#availableTickets").append(tr);
-    }
-    tr.append($('<td>').html(id));
-    tr.append($('<td>').html(ticket.owner));
-    tr.append($('<td>').html(ticket.description));
-    tr.append($('<td>').html(ticket.price.valueOf()));
-
-    if(mine)
-    {
-      if (ticket.forSale) {
-        tr.append($('<td>').html('<button class="btn" onclick="cancelSaleOfTicket('+id+')">Cancel Sale</button>'));
-
-      } else {
-        tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
-
-      }
-    }
-
-    if(!mine && ticket.forSale)
-    {
-      tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+id+','+ticket.price.valueOf()+')">Buy it!</button>'));
-    }
-}
-
 function prepareBuy(id, price) {
   $('#ticketid').val(id);
   $('#price').val(price);
