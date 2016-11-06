@@ -33,11 +33,12 @@ function refreshTickets() {
 function fetchTicket(index) {
   ticketChain.getTicketDetails.call(index).then(function(value) {
     var ticketDetails = parseTicketFromTicketDetailsResponse(value);
-    if (ticketDetails[0] != 0) {
-      if (ticketDetails[0] === account) {
+    console.log("aaa" + ticketDetails.owner);
+    if (ticketDetails.owner != 0) {
+      if (ticketDetails.owner === account) {
         addTicket(ticketDetails, index, true);
       } else {
-        addTicket(value, index, false);
+        addTicket(ticketDetails, index, false);
       }
       fetchTicket(++index);
     }
@@ -65,9 +66,9 @@ function addTicket(ticket, id, mine) {
       $("#availableTickets").append(tr);
     }
     tr.append($('<td>').html(id));
-    tr.append($('<td>').html(address));
+    tr.append($('<td>').html(ticket.owner));
     tr.append($('<td>').html(ticket.description));
-    tr.append($('<td>').html(ticket.price));
+    tr.append($('<td>').html(ticket.price.valueOf()));
 
     if(mine)
     {
@@ -76,13 +77,15 @@ function addTicket(ticket, id, mine) {
 
     if(!mine && ticket.forSale)
     {
-      tr.append($('<td>').html('<button class="btn" onclick="buyTicket('+id+')">Buy it!</button>'));
+      tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+id+','+ticket.price.valueOf()+')">Buy it!</button>'));
     }
+}
 
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error see log.");
-  });
+function prepareBuy(id, price) {
+  $('#ticketid').val(id);
+  $('#price').val(price);
+  $("#ticketid").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+  $('#price').fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
 }
 
 // Buy button action
@@ -104,7 +107,7 @@ function buyTicket() {
 
 };
 
-// Sell Button action 
+// Sell Button action
 function sellTicket(id) {
   var price = prompt("Please enter a price");
   ticketChain.sellTicket.sendTransaction(id, price, {from: account}).then(function() {
@@ -116,9 +119,13 @@ function sellTicket(id) {
   });
 }
 
+<<<<<<< HEAD
 
 
 // TODO A button beside a ticket that I own should be available in the view that calls this 
+=======
+// TODO A button beside a ticket that I own should be available in the view that calls this
+>>>>>>> 7ff34c7891eade2b548fe1c754e2eea7c9eb776e
 function cancelTicketSale(ticketId) {
 
   console.log("cancelTicketSale: Entering");
@@ -202,11 +209,13 @@ window.onload = function() {
 
     accounts = accs;
 
-    var accountId = getUrlParameter('id');
+    var accountId = getUrlParameter('id') || 0;
     console.log('Logged on as account ID: ' + accountId);
 
     account = accounts[accountId];
     console.log('Account key: ' + account);
+    var balance = web3.fromWei(web3.eth.getBalance(account));
+    console.log('Account balance:' + balance);
 
     $('#validatelink').attr('href', "http://zxing.appspot.com/scan?ret=" +
       encodeURI(window.location.href + "&function=validate&ticket={CODE}") + 
@@ -218,6 +227,8 @@ window.onload = function() {
     }
 
     document.getElementById("yourAddress").innerHTML = account;
+    document.getElementById("yourBalance").innerHTML = balance;
+    //$('#yourBalance').html(balance[0]);
     refreshTickets();
     //refreshMyTickets(account[0]);
     //refreshTicketsAvailable();
