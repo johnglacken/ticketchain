@@ -48,6 +48,18 @@ function fetchTicket(index) {
   });
 }
 
+function parseTicketFromTicketDetailsResponse(ticketDetailsArray)
+{
+  var ticketDetails = {};
+  ticketDetails.owner = ticketDetailsArray[0];
+  ticketDetails.price = ticketDetailsArray[1];
+  ticketDetails.forSale = ticketDetailsArray[2];
+  ticketDetails.description = ticketDetailsArray[3];
+
+  console.log('Returning ticket: ' + JSON.stringify(ticketDetails));
+  return ticketDetails;
+}
+
 function addTicket(address, id, mine) {
   var ticketChain = TicketChain.deployed();
   var tr = $('<tr>').attr('id', id);
@@ -58,26 +70,29 @@ function addTicket(address, id, mine) {
   }
   tr.append($('<td>').html(id));
   tr.append($('<td>').html(address));
+  
   // Get Description
-  ticketChain.getTicketDescription.call(id).then(function(value) {
-    $('#' + id).append($('<td>').html(value));
+  ticketChain.getTicketDetails.call(id).then(function(value) {
+    console.log('value: ' + value);
+
+    var ticketDetails = parseTicketFromTicketDetailsResponse(value);
+    $('#' + id).append($('<td>').html(ticketDetails.description));
+    $('#' + id).append($('<td>').html(ticketDetails.price));
+
+    if(mine)
+    {
+      tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
+    }
+
+    if(!mine && ticketDetails.forSale)
+    {
+      tr.append($('<td>').html('<button class="btn" onclick="buyTicket('+id+')">Buy it!</button>'));
+    }
+
   }).catch(function(e) {
     console.log(e);
     setStatus("Error see log.");
   });
-
-  // Get Price
-  ticketChain.getTicketPrice.call(id).then(function(value) {
-    $('#' + id).append($('<td>').html(value.valueOf()));
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error see log.");
-  });
-
-  if (mine) {
-    tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
-  }
-
 }
 
 // Buy button action
