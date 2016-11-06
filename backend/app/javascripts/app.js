@@ -25,7 +25,9 @@ function refreshTicketsAvailable() {
 // All others will be hidden
 function refreshTickets() {
   var myTickets = $("#myTickets");
+  myTickets.empty();
   var availableTickets = $("#availableTickets");
+  availableTickets.empty();
   var finished = false;
   fetchTicket(1);
 };
