@@ -268,14 +268,8 @@ window.onload = function() {
     }
 
     document.getElementById("yourAddress").innerHTML = account;
-<<<<<<< Updated upstream
-    // document.getElementById("yourBalance").innerHTML = balance;
-
-    // $('#yourBalance').html(balance[0]);
-=======
     document.getElementById("yourBalance").innerHTML = balance;
     //$('#yourBalance').html(balance[0]);
->>>>>>> Stashed changes
     refreshTickets();
   });
 }
