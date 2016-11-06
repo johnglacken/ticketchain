@@ -31,13 +31,12 @@ function refreshTickets() {
 };
 
 function fetchTicket(index) {
-  ticketChain.getTicketOwner.call(index).then(function(value) {
-    if (value != 0) {
-      if (value === account) {
-        console.log("MINEM mNEINMNNEMINE");
-        addTicket(value, index, true);
+  ticketChain.getTicketDetails.call(index).then(function(value) {
+    var ticketDetails = parseTicketFromTicketDetailsResponse(value);
+    if (ticketDetails[0] != 0) {
+      if (ticketDetails[0] === account) {
+        addTicket(ticketDetails, index, true);
       } else {
-      console.log(index);
         addTicket(value, index, false);
       }
       fetchTicket(++index);
@@ -48,14 +47,12 @@ function fetchTicket(index) {
   });
 }
 
-function parseTicketFromTicketDetailsResponse(ticketDetailsArray)
-{
+function parseTicketFromTicketDetailsResponse(ticketDetailsArray){
   var ticketDetails = {};
   ticketDetails.owner = ticketDetailsArray[0];
   ticketDetails.price = ticketDetailsArray[1];
   ticketDetails.forSale = ticketDetailsArray[2];
   ticketDetails.description = ticketDetailsArray[3];
-
   console.log('Returning ticket: ' + JSON.stringify(ticketDetails));
   return ticketDetails;
 }
@@ -84,7 +81,7 @@ function addTicket(address, id, mine) {
       tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
     }
 
-    if(!mine && ticketDetails.forSale)
+    if(!mine && ticket.forSale)
     {
       tr.append($('<td>').html('<button class="btn" onclick="buyTicket('+id+')">Buy it!</button>'));
     }
