@@ -9,11 +9,13 @@ function setStatus(message) {
   status.innerHTML = message;
 };
 
-function refreshTicketsAvailable() {
-  ticketChain.getAvailableTicketIds.call().then(function(value) {
-    var availableTickets = document.getElementById("availableTickets");
-    for(var i = 0; i < value.length; i++){
-      availableTickets.innerHTML += "<li>"+value[i]+"</li>";
+function refreshTickets() {
+
+  ticketChain.getTotalTicketCount.call().then(function(ticketCount) {
+    console.log('ticketCount: ' + ticketCount);
+    
+    for (var ticketIndex = 1; ticketIndex <= ticketCount; ticketIndex++) {
+      fetchTicket(ticketIndex);
     }
   }).catch(function(e) {
     console.log(e);
@@ -23,27 +25,20 @@ function refreshTicketsAvailable() {
 
 // Load all tickets and filter into My Tickets or Available Tickets.
 // All others will be hidden
-function refreshTickets() {
-  var myTickets = $("#myTickets");
-  myTickets.empty();
-  var availableTickets = $("#availableTickets");
-  availableTickets.empty();
-  var finished = false;
-  fetchTicket(1);
-};
+function fetchTicket(ticketId) {
+  console.log('fetchTicket: Entering');
 
-function fetchTicket(index) {
-  ticketChain.getTicketDetails.call(index).then(function(value) {
+  var ticketChain = TicketChain.deployed();
+
+  ticketChain.getTicketDetails.call(ticketId).then(function(value) {
     var ticketDetails = parseTicketFromTicketDetailsResponse(value);
-    console.log("aaa" + ticketDetails.owner);
-    if (ticketDetails.owner != 0) {
-      if (ticketDetails.owner === account) {
-        addTicket(ticketDetails, index, true);
-      } else {
-        addTicket(ticketDetails, index, false);
-      }
-      fetchTicket(++index);
+
+    if (ticketDetails.owner === account) {
+      addMyTicket(ticketId, ticketDetails);
+    } else if (ticketDetails.forSale) {
+      addAvailableTicket(ticketId, ticketDetails);
     }
+
   }).catch(function(e) {
     console.log(e);
     setStatus("Error see log.");
@@ -60,40 +55,42 @@ function parseTicketFromTicketDetailsResponse(ticketDetailsArray){
   return ticketDetails;
 }
 
-function addTicket(ticket, id, mine) {
-    var tr = $('<tr>').attr('id', id);
-    if(mine) {
-      $("#myTickets").append(tr);
-    } else {
-      $("#availableTickets").append(tr);
-    }
-    tr.append($('<td>').html(id));
-    tr.append($('<td>').html(ticket.owner));
-    tr.append($('<td>').html(ticket.description));
-    tr.append($('<td>').html(ticket.price.valueOf()));
-
-    if(mine)
-    {
-      if (ticket.forSale) {
-        tr.append($('<td>').html('<button class="btn" onclick="cancelTicketSale('+id+')">Cancel Sale</button>'));
-
-      } else {
-        tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
-
-      }
-    }
-
-    if(!mine && ticket.forSale)
-    {
-      tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+id+','+(parseInt(ticket.price.valueOf())+1)+')">Buy it!</button>'));
-    }
-}
-
 function prepareBuy(id, price) {
   $('#ticketid').val(id);
   $('#price').val(price);
   $("#ticketid").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
   $('#price').fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+}
+
+function addMyTicket(ticketId, ticketDetails) {
+  console.log("Adding ticket to the My Tickets list");
+
+  var tr = $('<tr>').attr('id', ticketId);
+  $("#myTickets").append(tr);
+  tr.append($('<td>').html(ticketId));
+  tr.append($('<td>').html(ticketDetails.owner));
+  tr.append($('<td>').html(ticketDetails.description));
+  tr.append($('<td>').html(ticketDetails.price.valueOf()));
+  
+  if (ticketDetails.forSale) {
+    tr.append($('<td>').html('<button class="btn" onclick="cancelSaleOfTicket('+ticketId+')">Cancel Sale</button>'));
+  } else {
+    tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+ticketId+')">Sell</button>'));
+  }
+}
+
+function addAvailableTicket(ticketId, ticketDetails) {
+  
+  console.log("Adding ticket to the Available Tickets list");
+
+  var tr = $('<tr>').attr('id', ticketId);
+  $("#availableTickets").append(tr);
+  tr.append($('<td>').html(ticketId));
+  tr.append($('<td>').html(ticketDetails.owner));
+  tr.append($('<td>').html(ticketDetails.description));
+  tr.append($('<td>').html(ticketDetails.price.valueOf()));
+  
+  tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+ticketId+','+(parseInt(ticketDetails.price.valueOf())+1)+')">Buy it!</button>'));
 }
 
 // Buy button action
@@ -112,7 +109,6 @@ function buyTicket() {
       console.log(e);
       setStatus("An error occured; see log.");
   });
-
 };
 
 // Sell Button action
@@ -242,13 +238,10 @@ window.onload = function() {
       validateTicket(getUrlParameter('ticket'), account);
     }
 
-    //document.getElementById("yourAddress").innerHTML = account;
-    //document.getElementById("yourBalance").innerHTML = balance;
-    //$('#yourBalance').html(balance[0]);
+    document.getElementById("yourAddress").innerHTML = account;
+    // document.getElementById("yourBalance").innerHTML = balance;
+    
+    // $('#yourBalance').html(balance[0]);
     refreshTickets();
-    //refreshMyTickets(account[0]);
-    //refreshTicketsAvailable();
-
-    //populateAccounts(web3);
   });
 }
