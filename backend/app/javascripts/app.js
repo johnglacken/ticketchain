@@ -119,13 +119,9 @@ function sellTicket(id) {
   });
 }
 
-<<<<<<< HEAD
 
 
-// TODO A button beside a ticket that I own should be available in the view that calls this 
-=======
 // TODO A button beside a ticket that I own should be available in the view that calls this
->>>>>>> 7ff34c7891eade2b548fe1c754e2eea7c9eb776e
 function cancelTicketSale(ticketId) {
 
   console.log("cancelTicketSale: Entering");
@@ -218,7 +214,7 @@ window.onload = function() {
     console.log('Account balance:' + balance);
 
     $('#validatelink').attr('href', "http://zxing.appspot.com/scan?ret=" +
-      encodeURI(window.location.href + "&function=validate&ticket={CODE}") + 
+      encodeURI(window.location.href + "&function=validate&ticket={CODE}") +
       "&SCAN_FORMATS=UPC_A,EAN_13");
 
     var qr_func = getUrlParameter('function');
