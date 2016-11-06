@@ -40,9 +40,22 @@ contract TicketChain {
 
 	function sellTicket(uint _uid, uint _price) returns(bool) {
 		Ticket ticket = tickets[_uid];
+
 		if (! (ticket.owner == msg.sender) ) throw;
+
 		if (ticket.forSale) throw;
+
 		ticket.price = _price;
+		ticket.forSale = true;
+	}
+
+	function cancelTicketSale(uint _uid) returns(bool) {
+		Ticket ticket = tickets[_uid];
+
+		if (! (ticket.owner == msg.sender) ) throw;
+
+		if (!ticket.forSale) throw;
+
 		ticket.forSale = true;
 	}
 

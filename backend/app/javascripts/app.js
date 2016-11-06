@@ -21,6 +21,8 @@ function refreshTicketsAvailable() {
   });
 };
 
+// Load all tickets and filter into My Tickets or Available Tickets.
+// All others will be hidden
 function refreshTickets() {
   var myTickets = $("#myTickets");
   var availableTickets = $("#availableTickets");
@@ -78,7 +80,7 @@ function addTicket(address, id, mine) {
 
 }
 
-
+// Buy button action
 function buyTicket() {
   var ticketChain = TicketChain.deployed();
 
@@ -97,6 +99,7 @@ function buyTicket() {
 
 };
 
+// Sell Button action 
 function sellTicket(id) {
   var price = prompt("Please enter a price");
   ticketChain.sellTicket.sendTransaction(id, price, {from: account}).then(function() {
@@ -107,6 +110,30 @@ function sellTicket(id) {
       setStatus("An error occured; see log.");
   });
 }
+
+// TODO A button beside a ticket that I own should be available in the view that calls this 
+function cancelTicketSale(ticketId) {
+
+  console.log("cancelTicketSale: Entering");
+
+  var ticketChain = TicketChain.deployed();
+
+  ticketChain.cancelTicketSale.call(ticketId).then(function(value) {
+
+      console.log("Have result of cancelTicketSale");
+
+      console.log(value);
+      console.log(value.description);
+
+      // TODO Update the screen with the ticket NOT being for sale
+
+    }).catch(function(e) {
+    console.log(e);
+    setStatus("An error occured; see log.");
+  });
+};
+
+// UNUSED. Demonstrates getting the details of a single ticket in JS
 function displaySingleTicket(ticketId) {
 
   console.log("displaySingleTicket: Entering");
