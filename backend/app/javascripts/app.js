@@ -20,7 +20,7 @@ function refreshTickets() {
     console.log('ticketCount: ' + ticketCount);
 
     for (var ticketIndex = 1; ticketIndex <= ticketCount; ticketIndex++) {
-      fetchTicket(ticketIndex);
+      fetchTicket(ticketIndex, ticketCount);
     }
   }).catch(function(e) {
     console.log(e);
@@ -30,20 +30,23 @@ function refreshTickets() {
 
 // Load all tickets and filter into My Tickets or Available Tickets.
 // All others will be hidden
-function fetchTicket(ticketId) {
+function fetchTicket(ticketId, numTickets) {
   console.log('fetchTicket: Entering');
 
   var ticketChain = TicketChain.deployed();
 
   ticketChain.getTicketDetails.call(ticketId).then(function(value) {
     var ticketDetails = parseTicketFromTicketDetailsResponse(value);
-
+    console.log();
     if (ticketDetails.owner === account) {
       addMyTicket(ticketId, ticketDetails);
     } else if (ticketDetails.forSale) {
       addAvailableTicket(ticketId, ticketDetails);
     }
-
+    // Show no tickets
+    if(ticketId == numTickets && $('#myTickets tbody > tr').length == 0) {
+      $('#notickets').show();
+    }
   }).catch(function(e) {
     console.log(e);
     setStatus("Error see log.");
@@ -61,6 +64,8 @@ function parseTicketFromTicketDetailsResponse(ticketDetailsArray){
 }
 
 function prepareBuy(id, price) {
+  $('#buyTicketDiv').show();
+    $('#selectbuyTicketDiv').hide();
   $('#ticketid').val(id);
   $('#price').val(price);
   $("#ticketid").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
@@ -118,6 +123,10 @@ function buyTicket() {
 
   ticketChain.buyTicket.sendTransaction(ticketid, {from: account, value: price}).then(function() {
       setStatus("Transaction complete!");
+      $('#notickets').hide();
+      $('#ticketid').val('');
+      $('#price').val('');
+      $('#buyTicketDiv').hide();
       refreshTickets();
     }).catch(function(e) {
       console.log(e);
@@ -244,7 +253,7 @@ window.onload = function() {
 
     account = accounts[accountId];
     console.log('Account key: ' + account);
-    var balance = web3.fromWei(web3.eth.getBalance(account));
+    var balance = web3.eth.getBalance(account);
     console.log('Account balance:' + balance);
 
     $('#validatelink').attr('href', "zxing://scan/?ret=" +
@@ -256,6 +265,7 @@ window.onload = function() {
       validateTicket(getUrlParameter('ticket'), account);
     }
 
+    document.getElementById("yourAccountID").innerHTML = accountId;
     document.getElementById("yourAddress").innerHTML = account;
     document.getElementById("yourBalance").innerHTML = balance;
     //$('#yourBalance').html(balance[0]);
