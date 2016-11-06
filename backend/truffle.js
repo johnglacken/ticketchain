@@ -1,11 +1,14 @@
 module.exports = {
   build: {
     "index.html": "index.html",
+    "printTicket.html": "printTicket.html",
     "app.js": [
       "javascripts/jquery-1.12.4.min.js",
-      "javascripts/app.js",
-      "javascripts/functions.js"
-
+      "javascripts/app.js"
+    ],
+    "printTicket.js": [
+      "javascripts/jquery-1.12.4.min.js",
+      "javascripts/printTicket.js"
     ],
     "app.css": [
       "stylesheets/app.css"
