@@ -13,7 +13,7 @@ module.exports = {
     "images/": "images/"
   },
   rpc: {
-    host: "localhost",
+    host: "blockhack.northeurope.cloudapp.azure.com",
     port: 8545
   }
 };

@@ -230,8 +230,7 @@ window.onload = function() {
     console.log('Account balance:' + balance);
 
     $('#validatelink').attr('href', "http://zxing.appspot.com/scan?ret=" +
-      encodeURI(window.location.href + "&function=validate&ticket={CODE}") +
-      "&SCAN_FORMATS=UPC_A,EAN_13");
+      encodeURI(window.location.href + "&function=validate&ticket={CODE}"));
 
     var qr_func = getUrlParameter('function');
     if(qr_func == "validate") {
