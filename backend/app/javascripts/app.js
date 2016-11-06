@@ -116,6 +116,8 @@ function sellTicket(id) {
   });
 }
 
+
+
 // TODO A button beside a ticket that I own should be available in the view that calls this 
 function cancelTicketSale(ticketId) {
 
@@ -132,6 +134,15 @@ function cancelTicketSale(ticketId) {
 
       // TODO Update the screen with the ticket NOT being for sale
 
+    }).catch(function(e) {
+    console.log(e);
+    setStatus("An error occured; see log.");
+  });
+};
+
+function validateTicket(ticketId, owner) {
+  ticketChain.validateTicket.call(ticketId, owner).then(function(value) {
+      $('#result').html("Ticket valid: " + value);
     }).catch(function(e) {
     console.log(e);
     setStatus("An error occured; see log.");
@@ -196,6 +207,15 @@ window.onload = function() {
 
     account = accounts[accountId];
     console.log('Account key: ' + account);
+
+    $('#validatelink').attr('href', "http://zxing.appspot.com/scan?ret=" +
+      encodeURI(window.location.href + "&function=validate&ticket={CODE}") + 
+      "&SCAN_FORMATS=UPC_A,EAN_13");
+
+    var qr_func = getUrlParameter('function');
+    if(qr_func == "validate") {
+      validateTicket(getUrlParameter('ticket'), account);
+    }
 
     document.getElementById("yourAddress").innerHTML = account;
     refreshTickets();
