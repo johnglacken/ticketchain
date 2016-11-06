@@ -77,11 +77,20 @@ function addMyTicket(ticketId, ticketDetails) {
   tr.append($('<td>').html(ticketDetails.description));
   tr.append($('<td>').html(ticketDetails.price.valueOf()));
 
+  tr.append($('<td>').html('<button class="btn" onclick="openPrintTicketWindow(' + ticketId + ')">Print Ticket</button>'));
+
   if (ticketDetails.forSale) {
     tr.append($('<td>').html('<button class="btn" onclick="cancelSaleOfTicket('+ticketId+')">Cancel Sale</button>'));
   } else {
     tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+ticketId+')">Sell</button>'));
   }
+}
+
+function openPrintTicketWindow(ticketId) {
+  console.log('openPrintTicketWindow: Entering');
+
+  window.open('printTicket.html?id=' + ticketId);
+  return false;
 }
 
 function addAvailableTicket(ticketId, ticketDetails) {
@@ -138,9 +147,7 @@ function cancelSaleOfTicket(id) {
       console.log(e);
       setStatus("An error occured; see log.");
   });
-
 }
-
 
 // TODO A button beside a ticket that I own should be available in the view that calls this
 function cancelTicketSale(ticketId) {
