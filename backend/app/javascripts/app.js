@@ -83,7 +83,7 @@ function addTicket(ticket, id, mine) {
 
     if(!mine && ticket.forSale)
     {
-      tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+id+','+ticket.price.valueOf()+')">Buy it!</button>'));
+      tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+id+','+(parseInt(ticket.price.valueOf())+1)+')">Buy it!</button>'));
     }
 }
 
@@ -240,8 +240,8 @@ window.onload = function() {
       validateTicket(getUrlParameter('ticket'), account);
     }
 
-    document.getElementById("yourAddress").innerHTML = account;
-    document.getElementById("yourBalance").innerHTML = balance;
+    //document.getElementById("yourAddress").innerHTML = account;
+    //document.getElementById("yourBalance").innerHTML = balance;
     //$('#yourBalance').html(balance[0]);
     refreshTickets();
     //refreshMyTickets(account[0]);
