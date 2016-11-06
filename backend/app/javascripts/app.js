@@ -77,9 +77,15 @@ function addTicket(ticket, id, mine) {
 
     if(!mine && ticket.forSale)
     {
-      tr.append($('<td>').html('<button class="btn" onclick="buyTicket('+id+')">Buy it!</button>'));
+      tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+id+','+ticket.price.valueOf()+')">Buy it!</button>'));
     }
+}
 
+function prepareBuy(id, price) {
+  $('#ticketid').val(id);
+  $('#price').val(price);
+  $("#ticketid").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+  $('#price').fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
 }
 
 // Buy button action
