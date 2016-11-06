@@ -9,6 +9,8 @@ contract TicketChain {
 		bool forSale;
 	}
 
+	uint totalTicketCount = 10;
+
 	mapping(uint => Ticket) tickets;
 
 	function TicketChain() {
@@ -22,6 +24,10 @@ contract TicketChain {
 		newTicket(8, this, "One Direction", 40);
 		newTicket(9, this, "Blockchain Hackathon", 15000);
 		newTicket(10, this, "Blockchain Hackathon", 15000);
+	}
+
+	function getTotalTicketCount() returns(uint) {
+		return totalTicketCount;
 	}
 
 	function newTicket(uint _uid, address _owner, string _description, uint _price) {
