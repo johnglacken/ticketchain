@@ -234,8 +234,8 @@ window.onload = function() {
     var balance = web3.fromWei(web3.eth.getBalance(account));
     console.log('Account balance:' + balance);
 
-    $('#validatelink').attr('href', "http://zxing.appspot.com/scan?ret=" +
-      encodeURI(window.location.href + "&function=validate&ticket={CODE}"));
+    $('#validatelink').attr('href', "zxing://scan/?ret=" +
+      encodeURIComponent(window.location.href + "&function=validate&ticket={CODE}"));
 
     var qr_func = getUrlParameter('function');
     if(qr_func == "validate") {
