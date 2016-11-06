@@ -131,7 +131,7 @@ function sellTicket(id) {
 // cancel sale of ticket
 function cancelSaleOfTicket(id) {
 
-  ticketChain.cancelTicketSale.call(id).then(function() {
+  ticketChain.cancelTicketSale.sendTransaction(id, price, {from: account}).then(function() {
       setStatus("cancel complete!");
       refreshTickets();
     }).catch(function(e) {
