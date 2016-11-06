@@ -13,7 +13,7 @@ function refreshTickets() {
 
   ticketChain.getTotalTicketCount.call().then(function(ticketCount) {
     console.log('ticketCount: ' + ticketCount);
-    
+
     for (var ticketIndex = 1; ticketIndex <= ticketCount; ticketIndex++) {
       fetchTicket(ticketIndex);
     }
@@ -55,6 +55,35 @@ function parseTicketFromTicketDetailsResponse(ticketDetailsArray){
   return ticketDetails;
 }
 
+function addTicket(ticket, id, mine) {
+    var tr = $('<tr>').attr('id', id);
+    if(mine) {
+      $("#myTickets").append(tr);
+    } else {
+      $("#availableTickets").append(tr);
+    }
+    tr.append($('<td>').html(id));
+    tr.append($('<td>').html(ticket.owner));
+    tr.append($('<td>').html(ticket.description));
+    tr.append($('<td>').html(ticket.price.valueOf()));
+
+    if(mine)
+    {
+      if (ticket.forSale) {
+        tr.append($('<td>').html('<button class="btn" onclick="cancelSaleOfTicket('+id+')">Cancel Sale</button>'));
+
+      } else {
+        tr.append($('<td>').html('<button class="btn" onclick="sellTicket('+id+')">Sell</button>'));
+
+      }
+    }
+
+    if(!mine && ticket.forSale)
+    {
+      tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+id+','+ticket.price.valueOf()+')">Buy it!</button>'));
+    }
+}
+
 function prepareBuy(id, price) {
   $('#ticketid').val(id);
   $('#price').val(price);
@@ -71,7 +100,7 @@ function addMyTicket(ticketId, ticketDetails) {
   tr.append($('<td>').html(ticketDetails.owner));
   tr.append($('<td>').html(ticketDetails.description));
   tr.append($('<td>').html(ticketDetails.price.valueOf()));
-  
+
   if (ticketDetails.forSale) {
     tr.append($('<td>').html('<button class="btn" onclick="cancelSaleOfTicket('+ticketId+')">Cancel Sale</button>'));
   } else {
@@ -80,7 +109,7 @@ function addMyTicket(ticketId, ticketDetails) {
 }
 
 function addAvailableTicket(ticketId, ticketDetails) {
-  
+
   console.log("Adding ticket to the Available Tickets list");
 
   var tr = $('<tr>').attr('id', ticketId);
@@ -89,7 +118,7 @@ function addAvailableTicket(ticketId, ticketDetails) {
   tr.append($('<td>').html(ticketDetails.owner));
   tr.append($('<td>').html(ticketDetails.description));
   tr.append($('<td>').html(ticketDetails.price.valueOf()));
-  
+
   tr.append($('<td>').html('<button class="btn" onclick="prepareBuy('+ticketId+','+(parseInt(ticketDetails.price.valueOf())+1)+')">Buy it!</button>'));
 }
 
@@ -126,8 +155,8 @@ function sellTicket(id) {
 // cancel sale of ticket
 function cancelSaleOfTicket(id) {
 
-  ticketChain.cancelTicketSale.sendTransaction(id, price, {from: account}).then(function() {
-      setStatus("Transaction complete!");
+  ticketChain.cancelTicketSale.call(id).then(function() {
+      setStatus("cancel complete!");
       refreshTickets();
     }).catch(function(e) {
       console.log(e);
@@ -239,9 +268,14 @@ window.onload = function() {
     }
 
     document.getElementById("yourAddress").innerHTML = account;
+<<<<<<< Updated upstream
     // document.getElementById("yourBalance").innerHTML = balance;
-    
+
     // $('#yourBalance').html(balance[0]);
+=======
+    document.getElementById("yourBalance").innerHTML = balance;
+    //$('#yourBalance').html(balance[0]);
+>>>>>>> Stashed changes
     refreshTickets();
   });
 }
