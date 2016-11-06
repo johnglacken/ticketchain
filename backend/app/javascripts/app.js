@@ -70,7 +70,7 @@ function addTicket(address, id, mine) {
   }
   tr.append($('<td>').html(id));
   tr.append($('<td>').html(address));
-  
+
   // Get Description
   ticketChain.getTicketDetails.call(id).then(function(value) {
     console.log('value: ' + value);
@@ -114,7 +114,7 @@ function buyTicket() {
 
 };
 
-// Sell Button action 
+// Sell Button action
 function sellTicket(id) {
   var price = prompt("Please enter a price");
   ticketChain.sellTicket.sendTransaction(id, price, {from: account}).then(function() {
@@ -126,7 +126,7 @@ function sellTicket(id) {
   });
 }
 
-// TODO A button beside a ticket that I own should be available in the view that calls this 
+// TODO A button beside a ticket that I own should be available in the view that calls this
 function cancelTicketSale(ticketId) {
 
   console.log("cancelTicketSale: Entering");
@@ -206,8 +206,12 @@ window.onload = function() {
 
     account = accounts[accountId];
     console.log('Account key: ' + account);
+    var balance = web3.fromWei(web3.eth.getBalance(account));
+    console.log('Account balance:' + balance);
 
     document.getElementById("yourAddress").innerHTML = account;
+    document.getElementById("yourBalance").innerHTML = balance;
+    //$('#yourBalance').html(balance[0]);
     refreshTickets();
     //refreshMyTickets(account[0]);
     //refreshTicketsAvailable();
