@@ -193,8 +193,12 @@ window.onload = function() {
 
     account = accounts[accountId];
     console.log('Account key: ' + account);
+    var balance = web3.fromWei(web3.eth.getBalance(account));
+    console.log('Account balance:' + balance);
 
     document.getElementById("yourAddress").innerHTML = account;
+    document.getElementById("yourBalance").innerHTML = balance;
+    //$('#yourBalance').html(balance[0]);
     refreshTickets();
     //refreshMyTickets(account[0]);
     //refreshTicketsAvailable();
